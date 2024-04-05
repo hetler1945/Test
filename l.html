@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Online Shop</title>
   <style>
+    /* Add your styles here */
     /* General styles */
     body {
       font-family: Arial, sans-serif;
@@ -57,6 +58,7 @@
       font-size: 16px;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     .button:hover {
@@ -144,6 +146,7 @@
     nav li {
       margin-right: 20px;
       cursor: pointer;
+      font-size: 18px;
     }
 
     nav li:last-child {
@@ -171,7 +174,6 @@
       transition: transform 0.3s ease;
       border-radius: 10px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      position: relative;
     }
 
     .product:hover {
@@ -184,21 +186,44 @@
       margin-bottom: 10px;
     }
 
+    .product h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .product p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .add-to-cart {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+      background-color: #555;
+    }
+
     /* Cart styles */
     #cart-panel {
       position: fixed;
       top: 0;
-      left: 0;
+      right: 0;
       background-color: #fff;
       padding: 20px;
-      border-right: 1px solid #ccc;
+      border-left: 1px solid #ccc;
       width: 300px;
       height: 100%;
-      transform: translateX(-100%);
+      transform: translateX(100%);
       transition: transform 0.3s ease;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
       z-index: 999;
-      overflow-y: scroll;
     }
 
     .dark-mode #cart-panel {
@@ -212,18 +237,53 @@
     #cart-items {
       list-style-type: none;
       padding: 0;
-      margin: 0;
     }
 
-    #cart-items li {
-      margin-bottom: 10px;
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
     }
 
-    #cart-items li:last-child {
-      margin-bottom: 0;
+    .cart-item:last-child {
       border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .cart-item-text {
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    .quantity-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-btn {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      margin: 0 5px;
+    }
+
+    .quantity-btn:hover {
+      background-color: #555;
+    }
+
+    .dark-mode .quantity-btn {
+      background-color: #555;
     }
 
     #cart-total {
@@ -250,57 +310,9 @@
     .close-icon {
       position: absolute;
       top: 10px;
-      left: 10px;
+      right: 10px;
       cursor: pointer;
       color: #000;
-    }
-
-    .quantity-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-
-    .quantity-btn {
-      background-color: #000;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-weight: bold;
-      position: relative;
-      z-index: 1;
-    }
-
-    .quantity-btn:hover {
-      background-color: #555;
-    }
-
-    .dark-mode .quantity-btn {
-      background-color: #555;
-    }
-
-    .quantity-btn:before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.2);
-      top: 0;
-      left: 0;
-      z-index: -1;
-      transition: transform 0.3s ease;
-      transform: scale(0);
-    }
-
-    .quantity-btn:hover:before {
-      transform: scale(1);
     }
 
     #dark-mode-toggle {
@@ -372,42 +384,25 @@
   <main>
     <div class="container">
       <section id="products">
+        <!-- Sample products -->
         <div class="product" data-category="electronics" data-price="199.99">
           <img src="electronics-product.jpg" alt="Electronics Product">
           <h2>Electronics Product</h2>
           <p>$199.99</p>
-          <div class="quantity-container">
-            <button class="quantity-btn minus-btn">-</button>
-            <span class="quantity">0</span>
-            <button class="quantity-btn plus-btn">+</button>
-          </div>
           <button class="add-to-cart">Add to Cart</button>
         </div>
-
         <div class="product" data-category="clothing" data-price="49.99">
           <img src="clothing-product.jpg" alt="Clothing Product">
           <h2>Clothing Product</h2>
           <p>$49.99</p>
-          <div class="quantity-container">
-            <button class="quantity-btn minus-btn">-</button>
-            <span class="quantity">0</span>
-            <button class="quantity-btn plus-btn">+</button>
-          </div>
           <button class="add-to-cart">Add to Cart</button>
         </div>
-
         <div class="product" data-category="books" data-price="14.99">
           <img src="books-product.jpg" alt="Books Product">
           <h2>Books Product</h2>
           <p>$14.99</p>
-          <div class="quantity-container">
-            <button class="quantity-btn minus-btn">-</button>
-            <span class="quantity">0</span>
-            <button class="quantity-btn plus-btn">+</button>
-          </div>
           <button class="add-to-cart">Add to Cart</button>
         </div>
-
         <!-- Add more products here -->
       </section>
     </div>
@@ -419,117 +414,129 @@
       const cartTotal = document.getElementById('cart-total');
       const cartPanel = document.getElementById('cart-panel');
       const cartItems = document.getElementById('cart-items');
-      const cart = document.getElementById('cart');
       const closeCartBtn = document.getElementById('close-cart');
       const searchBar = document.getElementById('search-bar');
       const darkModeToggle = document.getElementById('dark-mode-toggle');
-      const body = document.body;
+      const categories = document.querySelectorAll('.category');
+      const products = document.querySelectorAll('.product');
 
       let itemCount = 0;
       let total = 0;
 
       // Dark/Light Mode Toggle
       darkModeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
+        document.body.classList.toggle('dark-mode');
       });
 
-      // Add to Cart functionality
+      // Add to Cart Button Click Event
       addToCartButtons.forEach(button => {
         button.addEventListener('click', () => {
-          const price = parseFloat(button.previousElementSibling.textContent.replace('$', ''));
-          itemCount++;
-          total += price;
-          cartCount.textContent = itemCount;
-          cartTotal.textContent = total.toFixed(2);
-
-          const itemName = button.parentNode.querySelector('h2').textContent;
-          const li = document.createElement('li');
-          li.textContent = itemName + ' - $' + price.toFixed(2);
-
-          // Plus and minus buttons for adjusting quantities
-          const quantityContainer = document.createElement('div');
-          quantityContainer.classList.add('quantity-container');
-
-          const minusButton = document.createElement('button');
-          minusButton.textContent = '-';
-          minusButton.classList.add('quantity-btn', 'minus-btn');
-          minusButton.addEventListener('click', () => {
-            if (itemCount > 0) {
-              itemCount--;
-              cartCount.textContent = itemCount;
-              total -= price;
-              cartTotal.textContent = total.toFixed(2);
-              if (itemCount === 0) {
-                cartPanel.classList.remove('show');
-              }
-              li.textContent = itemName + ' - $' + price.toFixed(2);
-            }
-          });
-
-          const plusButton = document.createElement('button');
-          plusButton.textContent = '+';
-          plusButton.classList.add('quantity-btn', 'plus-btn');
-          plusButton.addEventListener('click', () => {
-            itemCount++;
-            cartCount.textContent = itemCount;
-            total += price;
-            cartTotal.textContent = total.toFixed(2);
-            li.textContent = itemName + ' x' + itemCount + ' - $' + (price * itemCount).toFixed(2);
-          });
-
-          quantityContainer.appendChild(minusButton);
-          quantityContainer.appendChild(plusButton);
-          li.appendChild(quantityContainer);
-
-          cartItems.appendChild(li);
-
-          button.classList.add('buy-animation');
-          setTimeout(() => {
-            button.classList.remove('buy-animation');
-          }, 500);
-
-          cartPanel.classList.add('show');
+          const product = button.parentElement;
+          const name = product.querySelector('h2').textContent;
+          const price = parseFloat(product.querySelector('p').textContent.replace('$', ''));
+          addToCart(name, price);
         });
       });
 
-      // Cart functionality
-      cart.addEventListener('click', () => {
-        cartPanel.classList.toggle('show');
-      });
+      // Add to Cart Function
+      function addToCart(name, price) {
+        itemCount++;
+        total += price;
+        cartCount.textContent = itemCount;
+        cartTotal.textContent = total.toFixed(2);
 
-      // Close cart
+        // Check if item already exists in cart
+        let item = cartItems.querySelector(`[data-name="${name}"]`);
+        if (item) {
+          item.dataset.quantity++;
+          item.querySelector('.quantity').textContent = `x${item.dataset.quantity}`;
+          item.querySelector('.price').textContent = `$${(price * item.dataset.quantity).toFixed(2)}`;
+        } else {
+          const li = document.createElement('li');
+          li.classList.add('cart-item');
+          li.dataset.name = name;
+          li.dataset.price = price;
+          li.dataset.quantity = 1;
+          li.innerHTML = `
+            <div class="cart-item-text">${name} <span class="quantity">x1</span></div>
+            <div class="quantity-container">
+              <button class="quantity-btn minus">-</button>
+              <button class="quantity-btn plus">+</button>
+              <div class="price">$${price.toFixed(2)}</div>
+            </div>
+          `;
+          cartItems.appendChild(li);
+        }
+
+        // Add event listeners to quantity buttons
+        const minusButtons = document.querySelectorAll('.quantity-btn.minus');
+        minusButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            updateQuantity(btn.closest('.cart-item'), -1);
+          });
+        });
+
+        const plusButtons = document.querySelectorAll('.quantity-btn.plus');
+        plusButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            updateQuantity(btn.closest('.cart-item'), 1);
+          });
+        });
+
+        // Show cart panel
+        cartPanel.classList.add('show');
+      }
+
+      // Update Quantity Function
+      function updateQuantity(item, quantityChange) {
+        let quantity = parseInt(item.dataset.quantity);
+        quantity += quantityChange;
+
+        if (quantity < 1) {
+          item.remove();
+        } else {
+          item.dataset.quantity = quantity;
+          item.querySelector('.quantity').textContent = `x${quantity}`;
+          const price = parseFloat(item.dataset.price);
+          item.querySelector('.price').textContent = `$${(price * quantity).toFixed(2)}`;
+        }
+
+        itemCount += quantityChange;
+        total += quantityChange * parseFloat(item.dataset.price);
+        cartCount.textContent = itemCount;
+        cartTotal.textContent = total.toFixed(2);
+
+        if (itemCount === 0) {
+          cartPanel.classList.remove('show');
+        }
+      }
+
+      // Close Cart Button Click Event
       closeCartBtn.addEventListener('click', () => {
         cartPanel.classList.remove('show');
       });
 
-      // Plus and minus button functionality
-      document.querySelectorAll('.plus-btn').forEach(button => {
-        button.addEventListener('click', () => {
-          const quantity = button.parentElement.querySelector('.quantity');
-          let value = parseInt(quantity.textContent);
-          value++;
-          quantity.textContent = value;
+      // Category Click Event
+      categories.forEach(category => {
+        category.addEventListener('click', () => {
+          const categoryValue = category.dataset.category;
+          products.forEach(product => {
+            const productCategory = product.dataset.category;
+            if (categoryValue === 'all' || categoryValue === productCategory) {
+              product.style.display = 'block';
+            } else {
+              product.style.display = 'none';
+            }
+          });
         });
       });
 
-      document.querySelectorAll('.minus-btn').forEach(button => {
-        button.addEventListener('click', () => {
-          const quantity = button.parentElement.querySelector('.quantity');
-          let value = parseInt(quantity.textContent);
-          if (value > 0) {
-            value--;
-            quantity.textContent = value;
-          }
-        });
-      });
-
-      // Search functionality
+      // Search Bar Event
       searchBar.addEventListener('input', () => {
         const searchTerm = searchBar.value.toLowerCase();
-        const products = document.querySelectorAll('.product');
         products.forEach(product => {
-          const title = product.querySelector('h2').textContent.toLowerCase();
-          if (title.includes(searchTerm)) {
+          const productName = product.querySelector('h2').textContent.toLowerCase();
+          if (productName.includes(searchTerm)) {
             product.style.display = 'block';
           } else {
             product.style.display = 'none';
@@ -540,3 +547,4 @@
   </script>
 </body>
 </html>
+
