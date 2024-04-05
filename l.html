@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Shop</title>
+  <style>
+    /* General styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+      color: #333;
+      transition: background-color 0.5s, color 0.5s;
+    }
+
+    .dark-mode body {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header styles */
+    header {
+      background-color: #000;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .button-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .button {
+      background-color: #000;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      border-radius: 5px;
+      margin-right: 10px;
+      font-size: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button:hover {
+      background-color: #555;
+    }
+
+    .button:before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      top: 0;
+      left: 0;
+      z-index: 0;
+      transition: transform 0.3s ease;
+      transform: translateX(-110%);
+    }
+
+    .button:hover:before {
+      transform: translateX(110%);
+    }
+
+    .button span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Search bar styles */
+    #search-container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    #search-bar {
+      padding: 8px 15px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+      font-size: 16px;
+      transition: width 0.3s ease;
+    }
+
+    #search-bar:focus {
+      width: 350px;
+    }
+
+    #search-bar::placeholder {
+      color: #aaa;
+    }
+
+    #search-bar-animation {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #fff;
+      bottom: 0;
+      left: 0;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    #search-bar:focus ~ #search-bar-animation {
+      transform: scaleX(1);
+    }
+
+    /* Navigation styles */
+    nav {
+      background-color: #333;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+    }
+
+    nav li {
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    nav li:last-child {
+      margin-right: 0;
+    }
+
+    /* Product styles */
+    main {
+      padding: 20px;
+    }
+
+    #products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    .product {
+      flex-basis: calc(25% - 40px);
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      text-align: center;
+      background-color: #fff;
+      transition: transform 0.3s ease;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .product:hover {
+      transform: translateY(-10px);
+    }
+
+    .product img {
+      max-width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    /* Cart styles */
+    #cart-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #fff;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      width: 300px;
+      height: 100%;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+      overflow-y: scroll;
+    }
+
+    .dark-mode #cart-panel {
+      background-color: #444;
+    }
+
+    #cart-panel.show {
+      transform: translateX(0);
+    }
+
+    #cart-items {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #cart-items li {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    #cart-items li:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    #cart-total {
+      font-weight: bold;
+    }
+
+    /* Additional animations */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .buy-animation {
+      animation: pulse 0.5s ease-in-out;
+    }
+
+    .close-icon {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+      color: #000;
+    }
+
+    .quantity-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+
+    .quantity-btn {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quantity-btn:hover {
+      background-color: #555;
+    }
+
+    .dark-mode .quantity-btn {
+      background-color: #555;
+    }
+
+    .quantity-btn:before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      top: 0;
+      left: 0;
+      z-index: -1;
+      transition: transform 0.3s ease;
+      transform: scale(0);
+    }
+
+    .quantity-btn:hover:before {
+      transform: scale(1);
+    }
+
+    #dark-mode-toggle {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #dark-mode-toggle:before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      top: 0;
+      left: 0;
+      z-index: 0;
+      transition: transform 0.3s ease;
+      transform: translateX(-110%);
+    }
+
+    #dark-mode-toggle:hover:before {
+      transform: translateX(110%);
+    }
+
+    #dark-mode-toggle span {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Online Shop</h1>
+      <div class="button-container">
+        <button id="dark-mode-toggle"><span>Dark Mode</span></button>
+        <div id="cart" class="button"><span>Cart (<span id="cart-count">0</span>)</span></div>
+      </div>
+      <div id="search-container">
+        <input type="text" id="search-bar" placeholder="Search products...">
+        <div id="search-bar-animation"></div>
+      </div>
+    </div>
+  </header>
+  <nav>
+    <div class="container">
+      <ul>
+        <li class="category" data-category="all">All</li>
+        <li class="category" data-category="electronics">Electronics</li>
+        <li class="category" data-category="clothing">Clothing</li>
+        <li class="category" data-category="books">Books</li>
+      </ul>
+    </div>
+  </nav>
+  <div id="cart-panel">
+    <div class="close-icon" id="close-cart">&#10006;</div>
+    <div class="container">
+      <ul id="cart-items"></ul>
+      <div>Total: $<span id="cart-total">0.00</span></div>
+    </div>
+  </div>
+  <main>
+    <div class="container">
+      <section id="products">
+        <div class="product" data-category="electronics" data-price="199.99">
+          <img src="electronics-product.jpg" alt="Electronics Product">
+          <h2>Electronics Product</h2>
+          <p>$199.99</p>
+          <div class="quantity-container">
+            <button class="quantity-btn minus-btn">-</button>
+            <span class="quantity">0</span>
+            <button class="quantity-btn plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="product" data-category="clothing" data-price="49.99">
+          <img src="clothing-product.jpg" alt="Clothing Product">
+          <h2>Clothing Product</h2>
+          <p>$49.99</p>
+          <div class="quantity-container">
+            <button class="quantity-btn minus-btn">-</button>
+            <span class="quantity">0</span>
+            <button class="quantity-btn plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="product" data-category="books" data-price="14.99">
+          <img src="books-product.jpg" alt="Books Product">
+          <h2>Books Product</h2>
+          <p>$14.99</p>
+          <div class="quantity-container">
+            <button class="quantity-btn minus-btn">-</button>
+            <span class="quantity">0</span>
+            <button class="quantity-btn plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <!-- Add more products here -->
+      </section>
+    </div>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const addToCartButtons = document.querySelectorAll('.add-to-cart');
+      const cartCount = document.getElementById('cart-count');
+      const cartTotal = document.getElementById('cart-total');
+      const cartPanel = document.getElementById('cart-panel');
+      const cartItems = document.getElementById('cart-items');
+      const cart = document.getElementById('cart');
+      const closeCartBtn = document.getElementById('close-cart');
+      const searchBar = document.getElementById('search-bar');
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      const body = document.body;
+
+      let itemCount = 0;
+      let total = 0;
+
+      // Dark/Light Mode Toggle
+      darkModeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+      });
+
+      // Add to Cart functionality
+      addToCartButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const price = parseFloat(button.previousElementSibling.textContent.replace('$', ''));
+          itemCount++;
+          total += price;
+          cartCount.textContent = itemCount;
+          cartTotal.textContent = total.toFixed(2);
+
+          const itemName = button.parentNode.querySelector('h2').textContent;
+          const li = document.createElement('li');
+          li.textContent = itemName + ' - $' + price.toFixed(2);
+
+          // Plus and minus buttons for adjusting quantities
+          const quantityContainer = document.createElement('div');
+          quantityContainer.classList.add('quantity-container');
+
+          const minusButton = document.createElement('button');
+          minusButton.textContent = '-';
+          minusButton.classList.add('quantity-btn', 'minus-btn');
+          minusButton.addEventListener('click', () => {
+            if (itemCount > 0) {
+              itemCount--;
+              cartCount.textContent = itemCount;
+              total -= price;
+              cartTotal.textContent = total.toFixed(2);
+              if (itemCount === 0) {
+                cartPanel.classList.remove('show');
+              }
+              li.textContent = itemName + ' - $' + price.toFixed(2);
+            }
+          });
+
+          const plusButton = document.createElement('button');
+          plusButton.textContent = '+';
+          plusButton.classList.add('quantity-btn', 'plus-btn');
+          plusButton.addEventListener('click', () => {
+            itemCount++;
+            cartCount.textContent = itemCount;
+            total += price;
+            cartTotal.textContent = total.toFixed(2);
+            li.textContent = itemName + ' x' + itemCount + ' - $' + (price * itemCount).toFixed(2);
+          });
+
+          quantityContainer.appendChild(minusButton);
+          quantityContainer.appendChild(plusButton);
+          li.appendChild(quantityContainer);
+
+          cartItems.appendChild(li);
+
+          button.classList.add('buy-animation');
+          setTimeout(() => {
+            button.classList.remove('buy-animation');
+          }, 500);
+
+          cartPanel.classList.add('show');
+        });
+      });
+
+      // Cart functionality
+      cart.addEventListener('click', () => {
+        cartPanel.classList.toggle('show');
+      });
+
+      // Close cart
+      closeCartBtn.addEventListener('click', () => {
+        cartPanel.classList.remove('show');
+      });
+
+      // Plus and minus button functionality
+      document.querySelectorAll('.plus-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const quantity = button.parentElement.querySelector('.quantity');
+          let value = parseInt(quantity.textContent);
+          value++;
+          quantity.textContent = value;
+        });
+      });
+
+      document.querySelectorAll('.minus-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const quantity = button.parentElement.querySelector('.quantity');
+          let value = parseInt(quantity.textContent);
+          if (value > 0) {
+            value--;
+            quantity.textContent = value;
+          }
+        });
+      });
+
+      // Search functionality
+      searchBar.addEventListener('input', () => {
+        const searchTerm = searchBar.value.toLowerCase();
+        const products = document.querySelectorAll('.product');
+        products.forEach(product => {
+          const title = product.querySelector('h2').textContent.toLowerCase();
+          if (title.includes(searchTerm)) {
+            product.style.display = 'block';
+          } else {
+            product.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
